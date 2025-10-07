@@ -37,6 +37,6 @@ export class AlumnoController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.alumnoService.remove(+id);
+    return this.alumnoService.remove(id);
   }
 }

@@ -76,8 +76,13 @@ export class AlumnoService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} alumno`;
+  async remove(id: string) {
+    const { deletedCount } = await this.alumnoModel.deleteOne({ _id: id });
+
+    if (deletedCount === 0)
+      throw new BadRequestException(`Alumno con id "${id}" no se encontro`);
+
+    return;
   }
 
   private handleExceptions(error: any) {

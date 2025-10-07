@@ -1,10 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AlumnoModule } from './alumno/alumno.module';
+import { ConfigModule } from '@nestjs/config';
+import { EnvConfiguration } from './config/env.config';
+import { JoiValidationSchema } from './config/joi.validation';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      load: [EnvConfiguration],
+      validationSchema: JoiValidationSchema,
+    }),
+
+    AlumnoModule,
+  ],
+  controllers: [],
 })
 export class AppModule {}

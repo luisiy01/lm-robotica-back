@@ -2,11 +2,12 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { Alumno } from './entities/alumno.entity';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -21,12 +22,7 @@ export class AlumnoService {
 
   mapDtoToEntity(createAlumnoDto: CreateAlumnoDto): Partial<Alumno> {
     return {
-      name: createAlumnoDto.name,
-      fecha1: createAlumnoDto.fecha1,
-      fecha2: createAlumnoDto.fecha2,
-      diaCobro: createAlumnoDto.diaCobro,
-      costoMensual: createAlumnoDto.costoMensual,
-      contacto: createAlumnoDto.contacto,
+      ...createAlumnoDto,
       createdOn: new Date().getTime(),
     };
   }
@@ -43,12 +39,22 @@ export class AlumnoService {
     }
   }
 
-  findAll() {
-    return `This action returns all alumno`;
+  async findAll() {
+    return this.alumnoModel.find().sort({ name: 1 }).select('-__v');
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} alumno`;
+  async findOne(id: string) {
+    let alumno: Alumno | null = null;
+    if (isValidObjectId(id)) {
+      alumno = await this.alumnoModel.findById(id);
+    }
+
+    if (!alumno)
+      throw new NotFoundException(
+        `Alumno con id "${id}" no se encuentra`,
+      );
+
+    return alumno;
   }
 
   update(id: number, updateAlumnoDto: UpdateAlumnoDto) {

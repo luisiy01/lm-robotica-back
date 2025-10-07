@@ -32,7 +32,7 @@ export class AlumnoController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAlumnoDto: UpdateAlumnoDto) {
-    return this.alumnoService.update(+id, updateAlumnoDto);
+    return this.alumnoService.update(id, updateAlumnoDto);
   }
 
   @Delete(':id')

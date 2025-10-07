@@ -8,7 +8,6 @@ import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { Alumno } from './entities/alumno.entity';
 import { isValidObjectId, Model } from 'mongoose';
-import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
@@ -16,14 +15,19 @@ export class AlumnoService {
   constructor(
     @InjectModel(Alumno.name)
     private readonly alumnoModel: Model<Alumno>,
-
-    private readonly configService: ConfigService,
   ) {}
 
   mapDtoToEntity(createAlumnoDto: CreateAlumnoDto): Partial<Alumno> {
     return {
       ...createAlumnoDto,
       createdOn: new Date().getTime(),
+    };
+  }
+
+  mapDtoToEntityUpdate(createAlumnoDto: UpdateAlumnoDto): Partial<Alumno> {
+    return {
+      ...createAlumnoDto,
+      updatedOn: new Date().getTime(),
     };
   }
 
@@ -50,15 +54,26 @@ export class AlumnoService {
     }
 
     if (!alumno)
-      throw new NotFoundException(
-        `Alumno con id "${id}" no se encuentra`,
-      );
+      throw new NotFoundException(`Alumno con id "${id}" no se encuentra`);
 
     return alumno;
   }
 
-  update(id: number, updateAlumnoDto: UpdateAlumnoDto) {
-    return `This action updates a #${id} alumno`;
+  async update(id: string, updateAlumnoDto: UpdateAlumnoDto) {
+    const alumno = await this.findOne(id);
+
+    const newAlumno = this.mapDtoToEntityUpdate(updateAlumnoDto);
+
+    try {
+      await alumno.updateOne(newAlumno, {
+        new: true,
+      });
+      const alumnoUpdated = { ...alumno.toJSON(), ...newAlumno };
+      delete alumnoUpdated['__v'];
+      return alumnoUpdated;
+    } catch (error) {
+      this.handleExceptions(error);
+    }
   }
 
   remove(id: number) {

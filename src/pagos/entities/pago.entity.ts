@@ -3,29 +3,28 @@ import mongoose, { Document, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Pago extends Document {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Alumno', required: true })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Alumno',
+    required: true,
+    index: true,
+  })
   alumnoId: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   periodoDePago: string;
 
   @Prop()
-  total?: number;
+  totalPagado?: number;
 
   @Prop()
   nombrePaquete?: string;
 
   @Prop()
-  fechaPago?: number;
+  fechaDePago?: number;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   pagado: boolean;
-
-  @Prop()
-  createdOn: number;
-
-  @Prop()
-  updatedOn?: number;
 }
 
 export const PagoSchema = SchemaFactory.createForClass(Pago);

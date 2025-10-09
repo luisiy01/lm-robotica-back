@@ -1,33 +1,12 @@
-import {
-  IsInt,
-  IsPositive,
-  IsString,
-  Max,
-  Min,
-  MinLength,
-  IsBoolean,
-} from 'class-validator';
+import { IsString, MinLength } from 'class-validator';
+import mongoose from 'mongoose';
 
 export class CreatePagoDto {
   @IsString()
   @MinLength(1)
-  alumnoId: string;
+  alumnoId: string | mongoose.Types.ObjectId;
 
   @IsString()
   @MinLength(1)
   periodoPagado: string;
-
-  @IsInt()
-  @IsPositive()
-  total: number;
-
-  @IsString()
-  @MinLength(1)
-  nombrePaquete: string;
-
-  @IsInt()
-  fechaPago?: number;
-
-  @IsBoolean()
-  pagado: boolean;
 }

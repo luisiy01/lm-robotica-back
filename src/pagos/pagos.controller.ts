@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PagosService } from './pagos.service';
 import { UpdatePagoDto } from './dto/update-pago.dto';
@@ -19,9 +20,28 @@ export class PagosController {
     return this.pagosService.findAll();
   }
 
-  @Get(':id')
+  /*    @Get(':id')
   findOne(@Param('id') id: string) {
     return this.pagosService.findOne(+id);
+  } */
+
+  @Get('find/')
+  findByAlumno(
+    @Query('alumno') alumnoId?: string,
+    @Query('periodo') periodoDePago?: string,
+    @Query('pagado') pagado?: boolean,
+    @Query('total') total?: number,
+    @Query('paquete') paquete?: string,
+    @Query('fecha') fecha?: number,
+  ) {
+    return this.pagosService.findByAlumno(
+      alumnoId,
+      periodoDePago,
+      pagado,
+      total,
+      paquete,
+      fecha,
+    );
   }
 
   @Patch(':id')

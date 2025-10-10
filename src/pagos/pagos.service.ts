@@ -24,24 +24,16 @@ export class PagosService {
       .select('-__v -createdAt -updatedAt');
   }
 
-  async findByAlumno(
-    alumnoId?: string,
-    periodoDePago?: string,
-    pagado?: boolean,
-    totalPagado?: number,
-    nombrePaquete?: string,
-    fechaDePago?: number,
-  ) {
+  async findByAlumno(camposBusqueda: any) {
     let pagos: any | null = null;
 
-    //construir objecto de busqueda
     let objetoBusqueda = {};
-    if (alumnoId) objetoBusqueda['alumnoId'] = alumnoId;
-    if (periodoDePago) objetoBusqueda['periodoDePago'] = periodoDePago;
-    if (pagado) objetoBusqueda['pagado'] = pagado;
-    if (totalPagado) objetoBusqueda['totalPagado'] = totalPagado;
-    if (nombrePaquete) objetoBusqueda['nombrePaquete'] = nombrePaquete;
-    if (fechaDePago) objetoBusqueda['fechaDePago'] = fechaDePago;
+
+    for (const key in camposBusqueda) {
+      if (camposBusqueda[key]) objetoBusqueda[key] = camposBusqueda[key];
+    }
+
+    console.log('objetoBusqueda', objetoBusqueda);
 
     pagos = await this.pagoModel
       .find(objetoBusqueda)

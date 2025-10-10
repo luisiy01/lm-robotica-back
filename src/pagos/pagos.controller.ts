@@ -30,18 +30,18 @@ export class PagosController {
     @Query('alumno') alumnoId?: string,
     @Query('periodo') periodoDePago?: string,
     @Query('pagado') pagado?: boolean,
-    @Query('total') total?: number,
-    @Query('paquete') paquete?: string,
-    @Query('fecha') fecha?: number,
+    @Query('total') totalPagado?: number,
+    @Query('paquete') nombrePaquete?: string,
+    @Query('fecha') fechaDePago?: number,
   ) {
-    return this.pagosService.findByAlumno(
+    return this.pagosService.findByAlumno({
       alumnoId,
       periodoDePago,
       pagado,
-      total,
-      paquete,
-      fecha,
-    );
+      totalPagado,
+      nombrePaquete,
+      fechaDePago,
+    });
   }
 
   @Patch(':id')

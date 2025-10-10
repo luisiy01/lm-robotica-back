@@ -22,6 +22,6 @@ import { ConfigModule } from '@nestjs/config';
       },
     ]),
   ],
-  exports: [MongooseModule],
+  exports: [MongooseModule, SeedService],
 })
 export class SeedModule {}

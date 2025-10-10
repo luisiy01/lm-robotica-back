@@ -9,12 +9,14 @@ import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { Alumno } from './entities/alumno.entity';
 import { isValidObjectId, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { SeedService } from 'src/seed/seed.service';
 
 @Injectable()
 export class AlumnoService {
   constructor(
     @InjectModel(Alumno.name)
     private readonly alumnoModel: Model<Alumno>,
+    private readonly seedService: SeedService,
   ) {}
 
   mapDtoToEntity(
@@ -30,6 +32,9 @@ export class AlumnoService {
 
     try {
       const alumno = await this.alumnoModel.create(newAlumno);
+
+      // crear registro de pago para ese mes
+      this.seedService.executeSeed();
 
       return alumno;
     } catch (error) {

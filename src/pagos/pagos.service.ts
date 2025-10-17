@@ -80,9 +80,10 @@ export class PagosService {
   };
 
   agregarProximosPagos = async (
-    pago,
+    pago: any,
     paquete: NombrePaquete,
     siguientePeriodoText: string,
+    totalPagado: number,
   ) => {
     const currentDate = new Date();
     switch (paquete) {
@@ -104,6 +105,8 @@ export class PagosService {
             periodoDePago: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
             pagado: true,
             periodoProxDePago: siguientePeriodoText,
+            nombrePaquete: paquete,
+            totalPagado: totalPagado,
           });
         }
         currentDate.setMonth(currentDate.getMonth() + 1);
@@ -122,6 +125,8 @@ export class PagosService {
             periodoDePago: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
             pagado: true,
             periodoProxDePago: siguientePeriodoText,
+            nombrePaquete: paquete,
+            totalPagado: totalPagado,
           });
         }
         currentDate.setMonth(currentDate.getMonth() + 1);
@@ -151,9 +156,11 @@ export class PagosService {
         );
       }
 
-      // revisar si es el mismo alumno
-
-      
+      if (pago.alumnoId != updatePagoDto.alumnoId) {
+        throw new InternalServerErrorException(
+          `El pago no corresponde al alumno`,
+        );
+      }
 
       const siguientePeriodoText = this.siguientePeriodo(
         updatePagoDto.nombrePaquete!.toLowerCase() as NombrePaquete,
@@ -169,6 +176,7 @@ export class PagosService {
         pago,
         updatePagoDto.nombrePaquete!.toLowerCase() as NombrePaquete,
         siguientePeriodoText,
+        updatePagoDto.totalPagado!,
       );
 
       return { ...pago!.toJSON(), ...updatePagoDto };

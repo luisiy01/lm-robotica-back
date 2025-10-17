@@ -134,6 +134,8 @@ export class PagosService {
         throw new InternalServerErrorException(`El pago tiene status de pagado`);
       }
 
+      // revisar si es el mismo alumno
+
       const siguientePeriodoText = this.siguientePeriodo(
         updatePagoDto.nombrePaquete!.toLowerCase() as NombrePaquete,
       );

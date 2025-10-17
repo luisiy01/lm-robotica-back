@@ -115,6 +115,22 @@ export class PagosService {
         });
         break;
       case '6 meses':
+        for (let i = 1; i < 5; i++) {
+          currentDate.setMonth(currentDate.getMonth() + 1);
+          await this.pagoModel.create({
+            alumnoId: pago.alumnoId,
+            periodoDePago: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
+            pagado: true,
+            periodoProxDePago: siguientePeriodoText,
+          });
+        }
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        await this.pagoModel.create({
+          alumnoId: pago.alumnoId,
+          periodoDePago: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
+          pagado: false,
+          periodoProxDePago: siguientePeriodoText,
+        });
         break;
       default:
         break;
@@ -125,16 +141,19 @@ export class PagosService {
     try {
       const pago = await this.pagoModel.findById(id);
 
-
       if (!pago) {
         throw new InternalServerErrorException(`El id del pago no existe`);
       }
 
-      if(pago.pagado){
-        throw new InternalServerErrorException(`El pago tiene status de pagado`);
+      if (pago.pagado) {
+        throw new InternalServerErrorException(
+          `El pago tiene status de pagado`,
+        );
       }
 
       // revisar si es el mismo alumno
+
+      
 
       const siguientePeriodoText = this.siguientePeriodo(
         updatePagoDto.nombrePaquete!.toLowerCase() as NombrePaquete,

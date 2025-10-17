@@ -93,9 +93,26 @@ export class PagosService {
           alumnoId: pago.alumnoId,
           periodoDePago: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
           pagado: false,
+          periodoProxDePago: siguientePeriodoText,
         });
         break;
       case '3 meses':
+        for (let i = 1; i < 2; i++) {
+          currentDate.setMonth(currentDate.getMonth() + 1);
+          await this.pagoModel.create({
+            alumnoId: pago.alumnoId,
+            periodoDePago: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
+            pagado: true,
+            periodoProxDePago: siguientePeriodoText,
+          });
+        }
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        await this.pagoModel.create({
+          alumnoId: pago.alumnoId,
+          periodoDePago: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
+          pagado: false,
+          periodoProxDePago: siguientePeriodoText,
+        });
         break;
       case '6 meses':
         break;
@@ -105,11 +122,16 @@ export class PagosService {
   };
 
   async registrarPago(id: string, updatePagoDto: UpdatePagoDto) {
-    try {      
+    try {
       const pago = await this.pagoModel.findById(id);
+
 
       if (!pago) {
         throw new InternalServerErrorException(`El id del pago no existe`);
+      }
+
+      if(pago.pagado){
+        throw new InternalServerErrorException(`El pago tiene status de pagado`);
       }
 
       const siguientePeriodoText = this.siguientePeriodo(
@@ -118,7 +140,7 @@ export class PagosService {
 
       await pago!.updateOne(updatePagoDto, {
         periodoProxDePago: siguientePeriodoText,
-        fechaDePago: new Date().getTime(),        
+        fechaDePago: new Date().getTime(),
       });
 
       // depende el paquete agregar en los proximos pagos

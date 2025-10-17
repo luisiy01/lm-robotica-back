@@ -23,6 +23,6 @@ import { Pago, PagoSchema } from 'src/pagos/entities/pago.entity';
       },
     ]),
   ],
-  exports: [MongooseModule],
+  exports: [MongooseModule, AlumnoService],
 })
 export class AlumnoModule {}

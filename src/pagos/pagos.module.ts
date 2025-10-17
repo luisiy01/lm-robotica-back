@@ -4,6 +4,8 @@ import { PagosController } from './pagos.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Pago, PagoSchema } from './entities/pago.entity';
 import { ConfigModule } from '@nestjs/config';
+import { AlumnoModule } from 'src/alumno/alumno.module';
+
 
 @Module({
   controllers: [PagosController],
@@ -16,6 +18,7 @@ import { ConfigModule } from '@nestjs/config';
         schema: PagoSchema,
       },
     ]),
+    AlumnoModule,
   ],
   exports: [MongooseModule],
 })

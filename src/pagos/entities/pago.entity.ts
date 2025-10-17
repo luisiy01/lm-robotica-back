@@ -15,6 +15,9 @@ export class Pago extends Document {
   periodoDePago: string;
 
   @Prop()
+  periodoProxDePago?: string;
+
+  @Prop()
   totalPagado?: number;
 
   @Prop()

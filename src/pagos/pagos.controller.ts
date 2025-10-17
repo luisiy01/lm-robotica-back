@@ -26,7 +26,7 @@ export class PagosController {
   } */
 
   @Get('find/')
-  findByAlumno(
+  async findByAlumno(
     @Query('alumno') alumnoId?: string,
     @Query('periodo') periodoDePago?: string,
     @Query('pagado') pagado?: boolean,
@@ -34,7 +34,7 @@ export class PagosController {
     @Query('paquete') nombrePaquete?: string,
     @Query('fecha') fechaDePago?: number,
   ) {
-    return this.pagosService.findByAlumno({
+    return await this.pagosService.find({
       alumnoId,
       periodoDePago,
       pagado,
@@ -45,8 +45,8 @@ export class PagosController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePagoDto: UpdatePagoDto) {
-    return this.pagosService.update(+id, updatePagoDto);
+  registrarPago(@Param('id') id: string, @Body() updatePagoDto: UpdatePagoDto) {
+    return this.pagosService.registrarPago(id, updatePagoDto);
   }
 
   @Delete(':id')

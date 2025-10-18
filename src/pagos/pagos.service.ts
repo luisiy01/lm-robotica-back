@@ -60,8 +60,13 @@ export class PagosService {
     return `This action returns a #${id} pago`;
   }
 
-  siguientePeriodo = (paquete: NombrePaquete): string => {
-    const currentDate = new Date();
+  siguientePeriodo = (
+    paquete: NombrePaquete,
+    periodoPagado: string,
+  ): string => {
+    const dateString = periodoPagado.split('-');
+    const currentDate = new Date(+dateString[1], +dateString[0] - 1, 1); // year month(month inicia en 0) date
+
     switch (paquete) {
       case '1 mes':
       case 'personalizado':
@@ -84,8 +89,10 @@ export class PagosService {
     paquete: NombrePaquete,
     siguientePeriodoText: string,
     totalPagado: number,
+    periodoPagado: string,
   ) => {
-    const currentDate = new Date();
+    const dateString = periodoPagado.split('-');
+    const currentDate = new Date(+dateString[1], +dateString[0] - 1, 1); // year month(month inicia en 0) date
     switch (paquete) {
       case '1 mes':
       case 'personalizado':
@@ -94,7 +101,6 @@ export class PagosService {
           alumnoId: pago.alumnoId,
           periodoDePago: `${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`,
           pagado: false,
-          periodoProxDePago: siguientePeriodoText,
         });
         break;
       case '3 meses':
@@ -164,9 +170,11 @@ export class PagosService {
 
       const siguientePeriodoText = this.siguientePeriodo(
         updatePagoDto.nombrePaquete!.toLowerCase() as NombrePaquete,
+        updatePagoDto.periodoPagado!,
       );
 
-      await pago!.updateOne(updatePagoDto, {
+      await pago!.updateOne({
+        ...updatePagoDto,
         periodoProxDePago: siguientePeriodoText,
         fechaDePago: new Date().getTime(),
       });
@@ -177,6 +185,7 @@ export class PagosService {
         updatePagoDto.nombrePaquete!.toLowerCase() as NombrePaquete,
         siguientePeriodoText,
         updatePagoDto.totalPagado!,
+        updatePagoDto.periodoPagado!,
       );
 
       return { ...pago!.toJSON(), ...updatePagoDto };

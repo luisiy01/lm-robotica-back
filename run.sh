@@ -4,8 +4,8 @@ echo "NODE_ENV: $NODE_ENV";
 if [ "$NODE_ENV" == "prod" ]
     then
         echo "start prod mode...";
-        npm run start:prod
+        yarn start
 else
     echo "start dev mode...";
-    npm run start:dev
+    yarn start:dev
 fi

@@ -6,6 +6,8 @@ import { JoiValidationSchema } from './config/joi.validation';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { PagosModule } from './pagos/pagos.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -26,6 +28,10 @@ import { join } from 'path';
     ),
 
     AlumnoModule,
+
+    PagosModule,
+
+    SeedModule,
   ],
   controllers: [],
 })

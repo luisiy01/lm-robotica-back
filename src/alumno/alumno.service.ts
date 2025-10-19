@@ -9,25 +9,21 @@ import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { Alumno } from './entities/alumno.entity';
 import { isValidObjectId, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { SeedService } from 'src/seed/seed.service';
 
 @Injectable()
 export class AlumnoService {
   constructor(
     @InjectModel(Alumno.name)
     private readonly alumnoModel: Model<Alumno>,
+    private readonly seedService: SeedService,
   ) {}
 
-  mapDtoToEntity(createAlumnoDto: CreateAlumnoDto): Partial<Alumno> {
+  mapDtoToEntity(
+    alumnoDto: CreateAlumnoDto | UpdateAlumnoDto,
+  ): Partial<Alumno> {
     return {
-      ...createAlumnoDto,
-      createdOn: new Date().getTime(),
-    };
-  }
-
-  mapDtoToEntityUpdate(createAlumnoDto: UpdateAlumnoDto): Partial<Alumno> {
-    return {
-      ...createAlumnoDto,
-      updatedOn: new Date().getTime(),
+      ...alumnoDto,
     };
   }
 
@@ -37,6 +33,9 @@ export class AlumnoService {
     try {
       const alumno = await this.alumnoModel.create(newAlumno);
 
+      // crear registro de pago para ese mes
+      this.seedService.executeSeed();
+
       return alumno;
     } catch (error) {
       this.handleExceptions(error);
@@ -44,13 +43,18 @@ export class AlumnoService {
   }
 
   async findAll() {
-    return this.alumnoModel.find().sort({ name: 1 }).select('-__v');
+    return this.alumnoModel
+      .find()
+      .sort({ name: 1 })
+      .select('-__v -createdAt -updatedAt');
   }
 
   async findOne(id: string) {
     let alumno: Alumno | null = null;
     if (isValidObjectId(id)) {
-      alumno = await this.alumnoModel.findById(id);
+      alumno = await this.alumnoModel
+        .findById(id)
+        .select('-__v -createdAt -updatedAt');
     }
 
     if (!alumno)
@@ -62,7 +66,7 @@ export class AlumnoService {
   async update(id: string, updateAlumnoDto: UpdateAlumnoDto) {
     const alumno = await this.findOne(id);
 
-    const newAlumno = this.mapDtoToEntityUpdate(updateAlumnoDto);
+    const newAlumno = this.mapDtoToEntity(updateAlumnoDto);
 
     try {
       await alumno.updateOne(newAlumno, {
@@ -70,6 +74,8 @@ export class AlumnoService {
       });
       const alumnoUpdated = { ...alumno.toJSON(), ...newAlumno };
       delete alumnoUpdated['__v'];
+      delete alumnoUpdated['createdAt'];
+      delete alumnoUpdated['updatedAt'];
       return alumnoUpdated;
     } catch (error) {
       this.handleExceptions(error);

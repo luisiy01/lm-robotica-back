@@ -1,4 +1,4 @@
-FROM node:20.14.0-bullseye
+FROM node:22.20.0-alpine3.21
 
 ENV APP_PORT=3000
 ENV NODE_ENV=prod

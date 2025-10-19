@@ -1,0 +1,10 @@
+     
+  db:
+    image: mongo:5
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGODB_DATABASE: lm-robotica
+    volumes:
+      - ./mongo:/data/db

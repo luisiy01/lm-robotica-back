@@ -7,5 +7,5 @@ if [ "$NODE_ENV" == "prod" ]
         yarn start
 else
     echo "start dev mode...";
-    yarn start
+    yarn start:dev
 fi

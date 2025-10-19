@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Alumno extends Document {
   @Prop({
     unique: true,
@@ -24,11 +24,6 @@ export class Alumno extends Document {
   @Prop()
   contacto: string;
 
-  @Prop()
-  createdOn: number;
-
-  @Prop()
-  updatedOn?: number;
 }
 
 export const AlumnoSchema = SchemaFactory.createForClass(Alumno);

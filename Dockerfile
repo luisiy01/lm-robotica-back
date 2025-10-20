@@ -18,8 +18,11 @@ RUN yarn build
 
 # Stage 2: Production
 FROM node:22.20.0-alpine3.21
-ENV NODE_ENV=prod
-ENV MONGODB=mongodb+srv://luisiy0-user:NgBVn98W0lbpQ1Nx@mongodbcluster.wm0mle9.mongodb.net/
+ARG NODE_ENV
+ENV NODE_ENV=$NODE_ENV
+
+ARG MONGODB
+ENV MONGODB=$MONGODB
 
 # Set working directory
 WORKDIR /app

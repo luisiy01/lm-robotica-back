@@ -10,8 +10,6 @@ COPY package.json .
 RUN yarn install
 COPY . .
 
-RUN yarn start
-
 EXPOSE ${APP_PORT}
 
-CMD ["bash", "run.sh"]
+CMD ["yarn", "start"]

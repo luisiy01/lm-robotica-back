@@ -5,10 +5,9 @@ services:
     container_name: nest-setup
     build: .
     environment:
-      - NODE_ENV=develop
+      - NODE_ENV=prod
     ports:
       - "3000:3000"
     volumes:
       - ./src:/var/prod/src
-      - ./test:/var/prod/test
       - ./package.json:/var/prod/package.json

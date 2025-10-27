@@ -6,6 +6,10 @@ import { Alumno, AlumnoSchema } from './entities/alumno.entity';
 import { ConfigModule } from '@nestjs/config';
 import { SeedService } from 'src/seed/seed.service';
 import { Pago, PagoSchema } from 'src/pagos/entities/pago.entity';
+import {
+  Asistencia,
+  AsistenciaSchema,
+} from 'src/asistencia/entities/asistencia.entity';
 
 @Module({
   controllers: [AlumnoController],
@@ -20,6 +24,10 @@ import { Pago, PagoSchema } from 'src/pagos/entities/pago.entity';
       {
         name: Pago.name,
         schema: PagoSchema,
+      },
+      {
+        name: Asistencia.name,
+        schema: AsistenciaSchema,
       },
     ]),
   ],

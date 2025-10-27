@@ -4,6 +4,10 @@ import { SeedController } from './seed.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Alumno, AlumnoSchema } from '../alumno/entities/alumno.entity';
 import { Pago, PagoSchema } from '../pagos/entities/pago.entity';
+import {
+  Asistencia,
+  AsistenciaSchema,
+} from '../asistencia/entities/asistencia.entity';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -19,6 +23,10 @@ import { ConfigModule } from '@nestjs/config';
       {
         name: Pago.name,
         schema: PagoSchema,
+      },
+      {
+        name: Asistencia.name,
+        schema: AsistenciaSchema,
       },
     ]),
   ],

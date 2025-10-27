@@ -11,5 +11,10 @@ export class SeedController {
     return this.seedService.executeSeed();
   }
 
+  @Get('asistencia')
+  executeAsistenciaSeed() {
+    return this.seedService.executeAsistenciaSeed();
+  }
+
  
 }

@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PagosModule } from './pagos/pagos.module';
 import { SeedModule } from './seed/seed.module';
+import { AsistenciaModule } from './asistencia/asistencia.module';
 
 @Module({
   imports: [
@@ -32,6 +33,8 @@ import { SeedModule } from './seed/seed.module';
     PagosModule,
 
     SeedModule,
+
+    AsistenciaModule,
   ],
   controllers: [],
 })

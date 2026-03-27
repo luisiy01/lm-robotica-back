@@ -4,12 +4,10 @@ import {
   ValidationPipe,
   LogLevel,
   Logger,
-  VersioningType,
 } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const logger = new Logger('bootstrap');
   const logLevel: LogLevel[] = ['error', 'warn', 'fatal', 'log'];
 
   if (process.env.NODE_ENV === 'dev') {
@@ -28,7 +26,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+  });
 
   app.setGlobalPrefix('api/v2');
 

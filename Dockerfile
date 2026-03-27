@@ -5,24 +5,21 @@ FROM node:22.20.0-alpine3.21 AS builder
 WORKDIR /app
 
 # Copy package.json and yarn.lock
-COPY package.json yarn.lock ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application code
 COPY . .
 
 # Build the application
-RUN yarn build
+RUN npm run build
 
 # Stage 2: Production
 FROM node:22.20.0-alpine3.21
 ARG NODE_ENV
 ENV NODE_ENV=$NODE_ENV
-
-ARG MONGODB
-ENV MONGODB=$MONGODB
 
 # Set working directory
 WORKDIR /app
@@ -30,10 +27,10 @@ WORKDIR /app
 # Copy only the necessary files from the build stage
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/yarn.lock ./yarn.lock
+COPY --from=builder /app/package-lock.json ./package-lock.json
 
 # Install only production dependencies
-RUN yarn install --frozen-lockfile --production
+RUN npm install --legacy-peer-deps --production
 
 # Expose the application port
 EXPOSE 3000

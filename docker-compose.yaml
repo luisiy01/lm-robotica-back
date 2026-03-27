@@ -7,7 +7,6 @@ services:
       context: .
       args:
         NODE_ENV: ${NODE_ENV}
-        MONGODB: ${MONGODB}
     environment:
       - NODE_ENV=prod
     ports:

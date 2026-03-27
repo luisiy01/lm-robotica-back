@@ -4,12 +4,10 @@ import {
   ValidationPipe,
   LogLevel,
   Logger,
-  VersioningType,
 } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const logger = new Logger('bootstrap');
   const logLevel: LogLevel[] = ['error', 'warn', 'fatal', 'log'];
 
   if (process.env.NODE_ENV === 'dev') {

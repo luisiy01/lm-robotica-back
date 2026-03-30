@@ -6,6 +6,7 @@ import { join } from 'path';
 import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { AlumnosModule } from './alumnos/alumnos.module';
+import { PagosModule } from './pagos/pagos.module';
 
 @Module({
   imports: [
@@ -22,6 +23,8 @@ import { AlumnosModule } from './alumnos/alumnos.module';
     AuthModule,
 
     AlumnosModule,
+
+    PagosModule,
   ],
   controllers: [],
 })

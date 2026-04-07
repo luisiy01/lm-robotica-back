@@ -7,12 +7,13 @@ import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { AlumnosModule } from './alumnos/alumnos.module';
 import { PagosModule } from './pagos/pagos.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [EnvConfiguration],
-      isGlobal: true
+      isGlobal: true,
     }),
 
     ServeStaticModule.forRoot({
@@ -25,7 +26,9 @@ import { PagosModule } from './pagos/pagos.module';
     AlumnosModule,
 
     PagosModule,
+
+    HealthModule,
   ],
   controllers: [],
 })
-export class AppModule { }
+export class AppModule {}

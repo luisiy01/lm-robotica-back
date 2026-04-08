@@ -1,7 +1,7 @@
 // asistencias.controller.ts
 import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
-import { AsistenciasService } from './assistencias.service';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
+import { AsistenciasService } from './assistencias.service';
 
 @Controller('asistencias')
 export class AsistenciasController {

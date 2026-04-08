@@ -69,4 +69,18 @@ export class AsistenciasService {
     if (error) throw new BadRequestException(error.message);
     return data;
   }
+
+  async eliminarAsistencia(id: string) {
+    const { data, error } = await this.client
+      .from(this.table)
+      .delete()
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      throw new BadRequestException(`No se pudo eliminar: ${error.message}`);
+    }
+
+    return data;
+  }
 }

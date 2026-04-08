@@ -57,11 +57,9 @@ export class AsistenciasService {
         `
         id,
         hora,
-        asistio,
         alumnos (
           id,
-          nombre,
-          apellido
+          nombre
         )
       `,
       )

@@ -1,5 +1,13 @@
 // asistencias.controller.ts
-import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  HttpStatus,
+  Get,
+  Query,
+} from '@nestjs/common';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { AsistenciasService } from './assistencias.service';
 
@@ -7,7 +15,7 @@ import { AsistenciasService } from './assistencias.service';
 export class AsistenciasController {
   constructor(private readonly asistenciasService: AsistenciasService) {}
 
-  @Post('registrar')
+  @Post('programar')
   async registrar(
     @Body() createAsistenciaDto: CreateAsistenciaDto,
     @Res() res,
@@ -25,5 +33,10 @@ export class AsistenciasController {
         error: error.message,
       });
     }
+  }
+
+  @Get()
+  async listarPorFecha(@Query('fecha') fecha: string) {
+    return await this.asistenciasService.obtenerAsistenciasPorFecha(fecha);
   }
 }

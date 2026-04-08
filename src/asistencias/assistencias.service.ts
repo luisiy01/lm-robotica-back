@@ -1,5 +1,5 @@
 // asistencias.service.ts
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 
@@ -13,21 +13,62 @@ export class AsistenciasService {
     return this.supabase.getClient();
   }
 
-  async registrarClase(createAsistenciaDto: CreateAsistenciaDto) {
-    const { alumno_id, fecha, hora } = createAsistenciaDto;
+  async registrarClase(data: any) {
+    const { alumno_id, fecha, hora } = data;
 
-    const { data, error } = await this.client
+    // 1. Validar si ya existe ese registro para evitar duplicados
+    const { data: existente } = await this.client
+      .from(this.table)
+      .select('id')
+      .match({ alumno_id, fecha, hora })
+      .single();
+
+    if (existente) {
+      throw new BadRequestException(
+        'El alumno ya está programado para esta clase y hora.',
+      );
+    }
+
+    // 2. Insertar el nuevo registro
+    const { data: nuevaAsistencia, error } = await this.client
       .from(this.table)
       .insert([
         {
           alumno_id,
           fecha,
           hora,
+          created_at: new Date(),
         },
       ])
-      .select();
+      .select()
+      .single();
 
-    if (error) throw new Error(error.message);
+    if (error) {
+      throw new BadRequestException(`Error de Supabase: ${error.message}`);
+    }
+
+    return nuevaAsistencia;
+  }
+
+  async obtenerAsistenciasPorFecha(fecha: string) {
+    const { data, error } = await this.client
+      .from(this.table)
+      .select(
+        `
+        id,
+        hora,
+        asistio,
+        alumnos (
+          id,
+          nombre,
+          apellido
+        )
+      `,
+      )
+      .eq('fecha', fecha)
+      .order('hora', { ascending: true });
+
+    if (error) throw new BadRequestException(error.message);
     return data;
   }
 }

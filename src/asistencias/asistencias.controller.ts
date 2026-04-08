@@ -7,6 +7,8 @@ import {
   HttpStatus,
   Get,
   Query,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
 import { AsistenciasService } from './assistencias.service';
@@ -38,5 +40,10 @@ export class AsistenciasController {
   @Get()
   async listarPorFecha(@Query('fecha') fecha: string) {
     return await this.asistenciasService.obtenerAsistenciasPorFecha(fecha);
+  }
+
+  @Delete(':id')
+  async eliminar(@Param('id') id: string) {
+    return await this.asistenciasService.eliminarAsistencia(id);
   }
 }

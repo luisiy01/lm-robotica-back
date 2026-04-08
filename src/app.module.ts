@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { AlumnosModule } from './alumnos/alumnos.module';
 import { PagosModule } from './pagos/pagos.module';
 import { HealthModule } from './health/health.module';
+import { AsistenciasModule } from './asistencias/asistencias.module';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { HealthModule } from './health/health.module';
     PagosModule,
 
     HealthModule,
+
+    AsistenciasModule,
   ],
   controllers: [],
 })

@@ -23,11 +23,12 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   app.enableCors({
-    origin: [
+    /*  origin: [
       'http://localhost:5173',
       'https://lm-robotica-front.vercel.app',
       'https://lm-robotica-front-1cwuu2wo1-luisiy01s-projects.vercel.app',
-    ],
+    ], */
+    origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: 'Content-Type, Accept, Authorization',
